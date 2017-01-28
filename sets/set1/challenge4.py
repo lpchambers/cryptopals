@@ -19,6 +19,23 @@ Converts a hexstr to a bytestring <class 'bytes'>
 def hex2bytes(hexstr):
 	return bytes([int(hexstr[i:i+2], 16) for i in range(0, len(hexstr), 2)])
 
+def bytes2hex(bytestr):
+	return "".join(["{:02x}".format(byte) for byte in bytestr])
+
+def string2bytes(string, encoding=None):
+	if encoding is None:
+		return string.encode()
+	else:
+		return string.encode(encoding)
+
+
+def bytes2string(bytestr, encoding=None):
+	if encoding is None:
+		return bytestr.decode()
+	else:
+		return bytestr.decode(encoding)
+
+
 """
 Takes 2 byte strings of the same length and returns the XOR of the 2
 """
@@ -38,6 +55,15 @@ XOR every char in a bytestring with a single char
 """
 def single_char_xor(bytestr, char):
 	return xor(len(bytestr) * bytes([char]), bytestr)
+
+"""
+In repeating-key XOR, you'll sequentially apply each byte of the key, then loop the key
+"""
+def repeating_char_xor(bytestr, repeat_bytestr):
+	lb = len(bytestr)
+	lr = len(repeat_bytestr)
+	repeat_length_bytestr = (lb // lr) * repeat_bytestr + repeat_bytestr[:lb % lr]
+	return xor(bytestr, repeat_length_bytestr)
 
 
 def string_is_printable(bytestr):
